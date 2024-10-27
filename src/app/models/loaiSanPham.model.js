@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const loaiSanPham = new Schema(
+const loaiSanPhamSchema = new Schema(
   {
     tenSanPham: { type: String },
   },
@@ -11,6 +11,6 @@ const loaiSanPham = new Schema(
   }
 );
 
-const LoaiSanPham = mongoose.model("LoaiSanPham", loaiSanPham);
+const LoaiSanPham = mongoose.model("LoaiSanPham", loaiSanPhamSchema);
 
 export default LoaiSanPham;
