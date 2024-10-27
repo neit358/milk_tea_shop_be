@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const nguoiDung = new Schema(
+const nguoiDungSchema = new Schema(
   {
     ten: { type: String },
     sdt: { type: String, require: true, unique: true },
@@ -13,6 +13,6 @@ const nguoiDung = new Schema(
   }
 );
 
-const NguoiDung = mongoose.model("NguoiDung", nguoiDung);
+const NguoiDung = mongoose.model("NguoiDung", nguoiDungSchema);
 
 export default NguoiDung;

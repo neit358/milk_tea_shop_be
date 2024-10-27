@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const chiNhanh = new Schema(
+const chiNhanhSchema = new Schema(
   {
     tenChiNhanh: { type: String },
     diaChi: {
@@ -22,6 +22,6 @@ const chiNhanh = new Schema(
   }
 );
 
-const ChiNhanh = mongoose.model("ChiNhanh", chiNhanh);
+const ChiNhanh = mongoose.model("ChiNhanh", chiNhanhSchema);
 
 export default ChiNhanh;

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const sanPham = new Schema(
+const sanPhamSchema = new Schema(
   {
     tenSanPham: { type: String },
     gia: { type: Number, required: true },
@@ -14,6 +14,7 @@ const sanPham = new Schema(
       },
     ],
     trangThai: { type: Boolean, default: true },
+    deXuat: { type: Boolean, default: false },
     isDel: { type: Boolean, default: false },
     loaiSanPham: {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,12 +33,12 @@ const sanPham = new Schema(
     hinhAnh: { type: String },
     ngot: [
       {
-        type: string,
+        type: String,
       },
     ],
     da: [
       {
-        type: string,
+        type: String,
       },
     ],
   },
@@ -46,6 +47,6 @@ const sanPham = new Schema(
   }
 );
 
-const SanPham = mongoose.model("SanPham", sanPham);
+const SanPham = mongoose.model("SanPham", sanPhamSchema);
 
 export default SanPham;

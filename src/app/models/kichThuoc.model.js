@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const kichThuoc = new Schema(
+const kichThuocSchema = new Schema(
   {
     tenKichThuoc: { type: String, required: true },
     giaThem: { type: Number, required: true },
@@ -12,6 +12,6 @@ const kichThuoc = new Schema(
   }
 );
 
-const KichThuoc = mongoose.model("KichThuoc", kichThuoc);
+const KichThuoc = mongoose.model("KichThuoc", kichThuocSchema);
 
 export default KichThuoc;
