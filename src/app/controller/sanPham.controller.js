@@ -8,7 +8,8 @@ const SanPhamController = {
       const sanPhamFound = await SanPham.findById(id)
         .populate("chiNhanhApDung")
         .populate("loaiSanPham")
-        .populate("kichThuoc.tenKichThuoc");
+        .populate("thongTinKichThuoc.kichThuoc");
+
       if (!sanPhamFound) {
         return res.status(404).json({
           success: false,
@@ -48,8 +49,13 @@ const SanPhamController = {
   filterSanPhams: async (req, res, next) => {
     try {
       const { page = 1, limit = 20, sortOrder = "" } = req.query;
-      const search = req.body;
-      let filter = { isDel: false, trangThai: true, ...search };
+      const data = req.body;
+      let filter = {
+        isDel: false,
+        trangThai: true,
+        ...data.search,
+        ...data.category,
+      };
 
       let sort = {};
       if (sortOrder === "date") {
@@ -70,7 +76,7 @@ const SanPhamController = {
         .limit(Number(limit) !== -1 ? limit : total)
         .populate("chiNhanhApDung")
         .populate("loaiSanPham")
-        .populate("kichThuoc.tenKichThuoc");
+        .populate("thongTinKichThuoc.kichThuoc");
 
       return res.status(200).json({
         success: true,
