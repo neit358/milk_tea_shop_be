@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const loaiSanPhamSchema = new Schema(
   {
-    tenSanPham: { type: String },
+    tenLoaiSanPham: { type: String },
   },
   {
     timestamps: true,

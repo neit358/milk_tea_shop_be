@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const kichThuocSchema = new Schema(
   {
     tenKichThuoc: { type: String, required: true },
-    giaThem: { type: Number, required: true },
   },
   {
     timestamps: true,

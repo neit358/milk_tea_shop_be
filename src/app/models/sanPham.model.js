@@ -21,9 +21,9 @@ const sanPhamSchema = new Schema(
       ref: "LoaiSanPham",
       required: true,
     },
-    kichThuoc: [
+    thongTinKichThuoc: [
       {
-        tenKichThuoc: {
+        kichThuoc: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "KichThuoc",
         },
