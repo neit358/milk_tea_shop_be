@@ -30,15 +30,26 @@ const sanPhamSchema = new Schema(
         giaThem: { type: Number, default: 0 },
       },
     ],
+    thongTinTopping: [
+      {
+        topping: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Topping",
+        },
+        giaThem: { type: Number, default: 0 },
+      },
+    ],
     hinhAnh: { type: String },
     ngot: [
       {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Ngot",
       },
     ],
     da: [
       {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Da",
       },
     ],
   },

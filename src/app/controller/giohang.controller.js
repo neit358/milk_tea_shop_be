@@ -1,4 +1,4 @@
-import GioHang from "../models/GioHang.model.js";
+import GioHang from "../models/gioHang.model.js";
 
 const gioHangController = {
   getGioHangs: async (req, res, next) => {
@@ -6,7 +6,8 @@ const gioHangController = {
       const { id } = req.params;
       const gioHangFound = await GioHang.findOne({ nguoiDung: id })
         .populate("items.sanPham")
-        .populate("items.thongTinKichThuoc.kichThuoc");
+        .populate("items.thongTinKichThuoc.kichThuoc")
+        .populate("items.thongTinTopping.topping");
       if (!gioHangFound) {
         return res.status(200).json({
           success: false,
@@ -36,15 +37,7 @@ const gioHangController = {
       if (!gioHangFound) {
         const newGioHang = new GioHang({
           nguoiDung: req.session.user._id,
-          items: [
-            {
-              sanPham: item.idSanPham,
-              soLuong: item.soLuong || 1,
-              thongTinKichThuoc: item.thongTinKichThuoc,
-              da: item.da,
-              ngot: item.ngot,
-            },
-          ],
+          items: [item],
         });
         const gioHangCreated = await newGioHang.save();
 
@@ -62,56 +55,27 @@ const gioHangController = {
         });
       }
 
-      const gioHangUpdated = await GioHang.findOneAndUpdate(
+      const gioHangUpdatedWithNewItem = await GioHang.findOneAndUpdate(
         {
           nguoiDung: req.session.user._id,
-          "items.sanPham._id": item.roomId,
         },
         {
-          $inc: { "items.$.soLuong": item.soLuong || 1 },
-          $set: {
-            "items.$.thongTinKichThuoc": item.thongTinKichThuoc,
-            "items.$.da": item.da,
-            "items.$.ngot": item.ngot,
+          $push: {
+            items: item,
           },
         }
       );
 
-      if (!gioHangUpdated) {
-        const gioHangUpdatedWithNewItem = await GioHang.findOneAndUpdate(
-          {
-            nguoiDung: req.session.user._id,
-          },
-          {
-            $push: {
-              items: {
-                roomId: item.roomId,
-                soLuong: item.soLuong || 1,
-                thongTinKichThuoc: item.thongTinKichThuoc,
-                da: item.da,
-                ngot: item.ngot,
-              },
-            },
-          }
-        );
-
-        if (!gioHangUpdatedWithNewItem) {
-          return res.status(400).json({
-            success: false,
-            message: "Không thể thêm vào danh sách giỏ hàng!",
-          });
-        }
-        return res.status(201).json({
-          success: true,
-          message: "Thêm vào danh sách giỏ hàng thành công!",
-          result: gioHangUpdatedWithNewItem,
+      if (!gioHangUpdatedWithNewItem) {
+        return res.status(400).json({
+          success: false,
+          message: "Không thể thêm vào danh sách giỏ hàng!",
         });
       }
-
       return res.status(201).json({
         success: true,
         message: "Thêm vào danh sách giỏ hàng thành công!",
-        result: gioHangUpdated,
+        result: gioHangUpdatedWithNewItem,
       });
     } catch (error) {
       return res.status(500).json({

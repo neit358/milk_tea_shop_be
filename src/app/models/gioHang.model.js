@@ -22,6 +22,16 @@ const gioHangSchema = new mongoose.Schema(
           },
           giaThem: { type: Number, default: 0 },
         },
+        thongTinTopping: [
+          {
+            topping: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Topping",
+            },
+            soLuong: { type: Number, default: 1 },
+            giaThem: { type: Number, default: 0 },
+          },
+        ],
         da: { type: String, required: true },
         ngot: { type: String, required: true },
       },

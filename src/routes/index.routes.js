@@ -5,9 +5,18 @@ import loaiSanPham from "./loaiSanPham.routes.js";
 import kichThuoc from "./kichThuoc.routes.js";
 import xacThuc from "./xacThuc.routes.js";
 import gioHang from "./gioHang.routes.js";
+import ngot from "./ngot.routes.js";
+import da from "./da.routes.js";
+import topping from "./topping.routes.js";
 const route = "/api/v1";
 
 function routes(app) {
+  app.use(`${route}/topping`, topping);
+
+  app.use(`${route}/da`, da);
+
+  app.use(`${route}/ngot`, ngot);
+
   app.use(`${route}/cart`, gioHang);
 
   app.use(`${route}/size`, kichThuoc);

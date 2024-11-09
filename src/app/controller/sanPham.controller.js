@@ -8,7 +8,10 @@ const SanPhamController = {
       const sanPhamFound = await SanPham.findById(id)
         .populate("chiNhanhApDung")
         .populate("loaiSanPham")
-        .populate("thongTinKichThuoc.kichThuoc");
+        .populate("ngot")
+        .populate("da")
+        .populate("thongTinKichThuoc.kichThuoc")
+        .populate("thongTinTopping.topping");
 
       if (!sanPhamFound) {
         return res.status(404).json({
