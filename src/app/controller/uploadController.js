@@ -5,7 +5,7 @@ import cloudinary from "../../config/cloudinary/cloudinaryConfig.js";
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "rooms",
+    folder: "milk_tea_shops",
     allowed_formats: ["jpg", "png", "jpeg"],
   },
 });

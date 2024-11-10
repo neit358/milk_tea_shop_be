@@ -8,14 +8,17 @@ import gioHang from "./gioHang.routes.js";
 import ngot from "./ngot.routes.js";
 import da from "./da.routes.js";
 import topping from "./topping.routes.js";
+import upload from "./upload.routes.js";
 const route = "/api/v1";
 
 function routes(app) {
+  app.use(`${route}/upload`, upload);
+
   app.use(`${route}/topping`, topping);
 
-  app.use(`${route}/da`, da);
+  app.use(`${route}/ice`, da);
 
-  app.use(`${route}/ngot`, ngot);
+  app.use(`${route}/sweet`, ngot);
 
   app.use(`${route}/cart`, gioHang);
 

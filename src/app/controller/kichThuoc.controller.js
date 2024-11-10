@@ -7,7 +7,7 @@ const KichThuocController = {
       return res.status(200).json({
         success: true,
         message: "Danh sách kích thước!",
-        data: kichThuocs,
+        result: kichThuocs,
       });
     } catch (error) {
       return res.status(500).json({
