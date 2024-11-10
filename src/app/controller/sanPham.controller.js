@@ -35,7 +35,7 @@ const SanPhamController = {
 
   getSanPhams: async (req, res, next) => {
     try {
-      const sanPhamsFound = await SanPham.find();
+      const sanPhamsFound = await SanPham.find({ isDel: false });
       return res.status(200).json({
         success: true,
         message: "Danh sách sản phẩm!",
@@ -96,6 +96,94 @@ const SanPhamController = {
                 : 1,
           },
         },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+
+  updateSanPham: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+
+      const sanPhamFound = await SanPham.findById(id);
+      if (!sanPhamFound) {
+        return res.status(404).json({
+          success: false,
+          message: "Sản phẩm không tồn tại!",
+        });
+      }
+      const sanPhamUpdated = await SanPham.findByIdAndUpdate(id, data);
+
+      if (!sanPhamUpdated) {
+        return res.status(404).json({
+          success: false,
+          message: "Cập nhật sản phẩm không thành công!",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Cập nhật sản phẩm thành công!",
+        result: sanPhamUpdated,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+
+  deleteSanPham: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const sanPhamFound = await SanPham.findById(id);
+      if (!sanPhamFound) {
+        return res.status(404).json({
+          success: false,
+          message: "Sản phẩm không tồn tại!",
+        });
+      }
+      const sanPhamUpdated = await SanPham.findByIdAndUpdate(id, {
+        isDel: true,
+      });
+
+      if (!sanPhamUpdated) {
+        return res.status(404).json({
+          success: false,
+          message: "Xóa sản phẩm không thành công!",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Xóa sản phẩm thành công!",
+        result: sanPhamUpdated,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+
+  createSanPham: async (req, res, next) => {
+    try {
+      const data = req.body;
+
+      const sanPhamCreated = await SanPham.create(data);
+
+      return res.status(201).json({
+        success: true,
+        message: "Tạo sản phẩm thành công!",
+        result: sanPhamCreated,
       });
     } catch (error) {
       return res.status(500).json({

@@ -7,7 +7,7 @@ const ChiNhanhController = {
       return res.status(200).json({
         success: true,
         message: "Danh sách chi nhánh!",
-        data: chiNhanhs,
+        result: chiNhanhs,
       });
     } catch (error) {
       return res.status(500).json({

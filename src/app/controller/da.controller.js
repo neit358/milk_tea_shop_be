@@ -7,7 +7,7 @@ const DaController = {
       return res.status(200).json({
         success: true,
         message: "Danh sách da!",
-        data: das,
+        result: das,
       });
     } catch (error) {
       return res.status(500).json({

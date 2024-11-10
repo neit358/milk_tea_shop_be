@@ -7,7 +7,7 @@ const ToppingController = {
       return res.status(200).json({
         success: true,
         message: "Danh sách topping!",
-        data: toppings,
+        result: toppings,
       });
     } catch (error) {
       return res.status(500).json({

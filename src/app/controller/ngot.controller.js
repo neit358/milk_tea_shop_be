@@ -7,7 +7,7 @@ const NgotController = {
       return res.status(200).json({
         success: true,
         message: "Danh sách ngotj!",
-        data: ngots,
+        result: ngots,
       });
     } catch (error) {
       return res.status(500).json({
