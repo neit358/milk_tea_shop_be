@@ -10,8 +10,10 @@ const SanPhamController = {
         .populate("loaiSanPham")
         .populate("ngot")
         .populate("da")
-        .populate("thongTinKichThuoc.kichThuoc")
-        .populate("thongTinTopping.topping");
+        .populate("tra")
+        .populate("khuyenMai")
+        .populate("thongTinTopping")
+        .populate("thongTinKichThuoc.kichThuoc");
 
       if (!sanPhamFound) {
         return res.status(404).json({
@@ -35,7 +37,15 @@ const SanPhamController = {
 
   getSanPhams: async (req, res, next) => {
     try {
-      const sanPhamsFound = await SanPham.find({ isDel: false });
+      const sanPhamsFound = await SanPham.find({ isDel: false })
+        .populate("chiNhanhApDung")
+        .populate("loaiSanPham")
+        .populate("ngot")
+        .populate("da")
+        .populate("tra")
+        .populate("khuyenMai")
+        .populate("thongTinTopping")
+        .populate("thongTinKichThuoc.kichThuoc");
       return res.status(200).json({
         success: true,
         message: "Danh sách sản phẩm!",
@@ -79,6 +89,11 @@ const SanPhamController = {
         .limit(Number(limit) !== -1 ? limit : total)
         .populate("chiNhanhApDung")
         .populate("loaiSanPham")
+        .populate("ngot")
+        .populate("da")
+        .populate("tra")
+        .populate("khuyenMai")
+        .populate("thongTinTopping")
         .populate("thongTinKichThuoc.kichThuoc");
 
       return res.status(200).json({

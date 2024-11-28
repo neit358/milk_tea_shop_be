@@ -7,7 +7,11 @@ const gioHangController = {
       const gioHangFound = await GioHang.findOne({ nguoiDung: id })
         .populate("items.sanPham")
         .populate("items.thongTinKichThuoc.kichThuoc")
-        .populate("items.thongTinTopping.topping");
+        .populate("items.thongTinTopping.topping")
+        .populate("items.ngot")
+        .populate("items.da")
+        .populate("items.tra")
+        .populate("items.khuyenMai");
       if (!gioHangFound) {
         return res.status(200).json({
           success: false,
@@ -29,11 +33,12 @@ const gioHangController = {
 
   addGioHang: async (req, res, next) => {
     try {
-      const { item } = req.body;
+      const item = req.body;
 
       const gioHangFound = await GioHang.findOne({
         nguoiDung: req.session.user._id,
       });
+
       if (!gioHangFound) {
         const newGioHang = new GioHang({
           nguoiDung: req.session.user._id,
@@ -87,9 +92,10 @@ const gioHangController = {
 
   deleteGioHang: async (req, res, next) => {
     try {
-      const { userId, item } = req.body;
+      const data = req.body;
+      const { id } = req.params;
 
-      const gioHangFound = await GioHang.findOne({ userId });
+      const gioHangFound = await GioHang.findOne({ _id: id });
       if (!gioHangFound) {
         return res.status(404).json({
           success: false,
@@ -98,9 +104,12 @@ const gioHangController = {
       }
 
       const gioHangUpdate = await GioHang.findOneAndUpdate(
-        { userId },
-        { $pull: { items: { roomId: item.roomId } } }
+        { _id: id },
+        {
+          $pull: { items: { _id: data.id } },
+        }
       );
+
       if (!gioHangUpdate) {
         return res.status(400).json({
           success: false,
@@ -111,6 +120,46 @@ const gioHangController = {
         success: true,
         message: "Xóa danh sách giỏ hàng thành công!",
         result: gioHangUpdate,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  },
+
+  updateGioHang: async (req, res, next) => {
+    const id = req.params.id;
+    const { idItem, ...itemUpdate } = req.body;
+
+    try {
+      const gioHangFound = await GioHang.findOne({ _id: id });
+      if (!gioHangFound) {
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy danh sách giỏ hàng!",
+        });
+      }
+
+      const gioHangUpdated = await GioHang.findOneAndUpdate(
+        { _id: id, "items._id": idItem },
+        {
+          "items.$": itemUpdate,
+        }
+      );
+
+      if (!gioHangUpdated) {
+        return res.status(400).json({
+          success: false,
+          message: "Cập nhật danh sách giỏ hàng không thành công!",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Cập nhật danh sách giỏ hàng thành công!",
+        result: gioHangUpdated,
       });
     } catch (error) {
       return res.status(500).json({

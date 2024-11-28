@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const loaiSanPhamSchema = new Schema(
   {
     tenLoaiSanPham: { type: String },
+    isDel: { type: Boolean, default: false },
   },
   {
     timestamps: true,
