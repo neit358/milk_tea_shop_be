@@ -29,11 +29,24 @@ const gioHangSchema = new mongoose.Schema(
               ref: "Topping",
             },
             soLuong: { type: Number, default: 1 },
-            giaThem: { type: Number, default: 0 },
           },
         ],
-        da: { type: String, required: true },
-        ngot: { type: String, required: true },
+        da: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Da",
+        },
+        ngot: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Ngot",
+        },
+        tra: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Tra",
+        },
+        khuyenMai: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "KhuyenMai",
+        },
       },
     ],
   },

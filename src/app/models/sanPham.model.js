@@ -32,11 +32,8 @@ const sanPhamSchema = new Schema(
     ],
     thongTinTopping: [
       {
-        topping: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Topping",
-        },
-        giaThem: { type: Number, default: 0 },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Topping",
       },
     ],
     hinhAnh: { type: String },
@@ -50,6 +47,18 @@ const sanPhamSchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Da",
+      },
+    ],
+    tra: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tra",
+      },
+    ],
+    khuyenMai: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "KhuyenMai",
       },
     ],
   },

@@ -92,6 +92,33 @@ const XacThucController = {
     next(error);
     return;
   },
+
+  checkAuth: async (req, res, next) => {
+    if (req.session.user) {
+      const nguoiDungFound = await NguoiDung.findOne({
+        sdt: req.session.user.sdt,
+      });
+
+      if (!nguoiDungFound) {
+        req.session.destroy();
+        return res.status(401).json({
+          success: false,
+          message: "Tài khoản không tồn tại!",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Đã đăng nhập!",
+        result: req.session.user,
+      });
+    }
+
+    return res.status(200).json({
+      success: false,
+      message: "Chưa đăng nhập!",
+    });
+  },
 };
 
 export default XacThucController;

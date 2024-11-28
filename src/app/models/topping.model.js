@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const toppingSchema = new Schema(
   {
     tenTopping: { type: String },
+    gia: { type: Number, default: 0 },
   },
   {
     timestamps: true,
