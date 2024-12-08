@@ -5,7 +5,9 @@ import omit from "lodash/omit.js";
 const XacThucController = {
   register: async (req, res, next) => {
     try {
-      const nguoiDungFound = await NguoiDung.findOne({ sdt: req.body.sdt });
+      const nguoiDungFound = await NguoiDung.findOne({
+        sdt: req.body.sdt,
+      });
       if (nguoiDungFound) {
         return res.status(200).json({
           success: false,
@@ -34,7 +36,9 @@ const XacThucController = {
 
   login: async (req, res, next) => {
     try {
-      const nguoiDungFound = await NguoiDung.findOne({ sdt: req.body.sdt });
+      const nguoiDungFound = await NguoiDung.findOne({
+        sdt: req.body.sdt,
+      }).populate("vaiTro");
 
       if (!nguoiDungFound) {
         return res.status(404).json({

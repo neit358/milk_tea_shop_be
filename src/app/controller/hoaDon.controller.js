@@ -33,7 +33,7 @@ const hoaDonController = {
   getHoaDon: async (req, res, next) => {
     try {
       const hoaDonFound = await HoaDon.find({
-        nguoiDung: req.session.user.id,
+        nguoiDung: req.session.user._id,
         isDel: false,
       }).populate("trangThai");
 
@@ -85,7 +85,29 @@ const hoaDonController = {
 
   filterHoaDons: async (req, res, next) => {
     try {
-      const data = req.body;
+      const { data } = req.body;
+
+      if (data.createdAt) {
+        const date = new Date(data.createdAt);
+        const startOfDay = new Date(
+          `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}-${String(date.getDate()).padStart(2, "0")}T00:00:00.000Z`
+        );
+
+        const endOfDay = new Date(
+          `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+            2,
+            "0"
+          )}-${String(date.getDate()).padStart(2, "0")}T23:59:59.999Z`
+        );
+
+        data.createdAt = {
+          $gte: startOfDay,
+          $lte: endOfDay,
+        };
+      }
 
       let filter = {
         isDel: false,
@@ -118,6 +140,27 @@ const hoaDonController = {
     try {
       const filter = req.body;
 
+      const matchOneFollow = filter[0].$match?.["trangThai"]?.["$ne"]
+        ? {
+            trangThai: {
+              $ne: new ObjectId(filter[0].$match?.["trangThai"]?.["$ne"]),
+            },
+          }
+        : filter[0].$match?.["trangThai"]
+        ? {
+            trangThai: new ObjectId(filter[0].$match?.["trangThai"]),
+          }
+        : {};
+
+      filter[0].$match = {
+        ...filter[0].$match,
+        ...matchOneFollow,
+        createdAt: {
+          $gte: new Date(filter[0].$match.createdAt.$gte),
+          $lte: new Date(filter[0].$match.createdAt.$lte),
+        },
+      };
+
       const filterData =
         filter[2].$match["items.sanPham.loaiSanPham"] &&
         filter[2].$match["items.sanPham._id"]
@@ -145,38 +188,12 @@ const hoaDonController = {
             }
           : {};
 
-      filter[0].$match = {
-        ...filter[0].$match,
-        createdAt: {
-          $gte: new Date(filter[0].$match.createdAt.$gte),
-          $lte: new Date(filter[0].$match.createdAt.$lte),
-        },
-      };
-
       filter[2].$match = {
+        ...filter[2].$match,
         ...filterData,
       };
 
-      const hoaDonsFound = await HoaDon.aggregate([
-        {
-          $match: filter[0].$match,
-        },
-        {
-          $unwind: filter[1].$unwind,
-        },
-        {
-          $match: filter[2].$match,
-        },
-        {
-          $group: filter[3].$group,
-        },
-        {
-          $project: filter[4].$project,
-        },
-        {
-          $sort: filter[5].$sort,
-        },
-      ]);
+      const hoaDonsFound = await HoaDon.aggregate(filter);
 
       if (!hoaDonsFound) {
         return res.status(404).json({
@@ -201,7 +218,13 @@ const hoaDonController = {
   addHoaDon: async (req, res, next) => {
     try {
       const data = req.body;
-      const hoaDonCreated = await HoaDon.create(data);
+
+      const bodyRequest = {
+        nguoiDung: req.session.user,
+        ...data,
+      };
+
+      const hoaDonCreated = await HoaDon.create(bodyRequest);
 
       if (!hoaDonCreated) {
         return res.status(400).json({

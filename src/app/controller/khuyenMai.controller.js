@@ -99,7 +99,7 @@ const khuyenMaiController = {
 
   applyPromotions: async (req, res, next) => {
     try {
-      const { idPromotion } = req.params;
+      const { id } = req.params;
       const data = req.body;
       const khuyenMaiFound = await KhuyenMai.findById(id);
 
@@ -110,31 +110,31 @@ const khuyenMaiController = {
         });
       }
 
-      const { danhSachKhuyenMai, type } = data;
+      const { listId, type } = data;
 
-      if (type !== "orderDiscount") {
+      if (type !== "orderDiscount" && listId.length > 0) {
         const productsPromotion = await Promise.all(
-          danhSachKhuyenMai.map(async (id) => {
+          listId.map(async (idParam) => {
             try {
               const productPromotion =
                 type === "categoryDiscount"
                   ? await SanPham.updateMany(
                       {
-                        loaiSanPham: id,
+                        loaiSanPham: idParam,
                       },
                       {
                         $push: {
-                          khuyenMai: idPromotion,
+                          khuyenMai: id,
                         },
                       }
                     )
                   : await SanPham.findByIdAndUpdate(
                       {
-                        _id: id,
+                        _id: idParam,
                       },
                       {
                         $push: {
-                          khuyenMai: idPromotion,
+                          khuyenMai: id,
                         },
                       }
                     );
@@ -153,13 +153,12 @@ const khuyenMaiController = {
             message: "Áp dụng khuyến mãi không thành công!",
           });
         }
-
-        return res.status(200).json({
-          success: true,
-          message: "Áp dụng khuyến mãi thành công!",
-          result: productsPromotion,
-        });
       }
+
+      return res.status(200).json({
+        success: true,
+        message: "Áp dụng khuyến mãi thành công!",
+      });
     } catch (error) {
       return res.status(500).json({
         message: error.message,
