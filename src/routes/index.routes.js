@@ -13,14 +13,17 @@ import tra from "./tra.routes.js";
 import hoaDon from "./hoaDon.routes.js";
 import trangThai from "./trangThai.routes.js";
 import khuyenMai from "./khuyenMai.routes.js";
+import vaiTro from "./vaiTro.routes.js";
 const route = "/api/v1";
 
 function routes(app) {
+  app.use(`${route}/role`, vaiTro);
+
   app.use(`${route}/promotion`, khuyenMai);
 
   app.use(`${route}/status`, trangThai);
 
-  app.use(`${route}/invoice`, hoaDon);
+  app.use(`${route}/order`, hoaDon);
 
   app.use(`${route}/tea`, tra);
 

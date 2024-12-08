@@ -1,3 +1,5 @@
+import NguoiDung from "../models/nguoiDung.model.js";
+
 const NguoiDungController = {
   getNguoiDung: async (req, res, next) => {
     try {

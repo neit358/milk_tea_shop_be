@@ -4,18 +4,7 @@ const Schema = mongoose.Schema;
 
 const hoaDonSchema = new Schema(
   {
-    nguoiDung: {
-      ten: { type: String },
-      sdt: { type: String, require: true, unique: true },
-      matKhau: { type: String, require: true },
-      diaChi: {
-        soNha: { type: String },
-        tenDuong: { type: String },
-        phuong: { type: String },
-        quan: { type: String },
-        thanhPho: { type: String },
-      },
-    },
+    nguoiDung: { type: mongoose.Schema.Types.ObjectId, ref: "NguoiDung" },
     items: [
       {
         sanPham: {
@@ -71,10 +60,12 @@ const hoaDonSchema = new Schema(
               ref: "Tra",
             },
           ],
-          khuyenMai: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "KhuyenMai",
-          },
+          khuyenMai: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "KhuyenMai",
+            },
+          ],
         },
         soLuong: { type: Number, default: 1 },
         thongTinKichThuoc: {
@@ -101,6 +92,19 @@ const hoaDonSchema = new Schema(
         tra: {
           tenTra: { type: String },
         },
+        khuyenMai: {
+          tenKhuyenMai: { type: String },
+          moTa: { type: String },
+          phuongThucKhuyenMai: { type: String },
+          giaTriKhuyenMai: { type: Number },
+          giaTriDonHangToiThieu: { type: Number },
+          giaToiDaKhuyenMai: { type: Number },
+          ngayBatDau: { type: Date },
+          ngayKetThuc: { type: Date },
+          trangThai: { type: Number, default: 1 },
+          tag: { type: String },
+          isDel: { type: Boolean, default: false },
+        },
         soLuongKhuyenMai: { type: Number },
         tongTien: { type: Number },
         giamGia: { type: Number },
@@ -121,8 +125,10 @@ const hoaDonSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "TrangThai",
     },
-    thoiGianGiao: { type: String },
+    thoiGianGiao: { type: Date },
     phuongThucThanhToan: { type: String },
+    soLuongSanPham: { type: Number },
+    chiNhanh: { type: String },
     khuyenMai: {
       tenKhuyenMai: { type: String },
       moTa: { type: String },
