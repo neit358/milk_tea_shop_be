@@ -32,11 +32,19 @@ const khuyenMaiController = {
 
   getKhuyenMais: async (req, res, next) => {
     try {
-      const khuyenMaiListFound = await KhuyenMai.find({ isDel: false });
+      const khuyenMaisFound = await KhuyenMai.find({ isDel: false });
+
+      if (!khuyenMaisFound) {
+        return res.status(404).json({
+          success: false,
+          message: "Danh sách khuyến mãi trống!",
+        });
+      }
+
       return res.status(200).json({
         success: true,
         message: "Lấy danh sách khuyến mãi thành công!",
-        result: khuyenMaiListFound,
+        result: khuyenMaisFound,
       });
     } catch (error) {
       return res.status(500).json({
@@ -75,6 +83,15 @@ const khuyenMaiController = {
     try {
       const { id } = req.params;
       const data = req.body;
+
+      const khuyenMaiFound = await KhuyenMai.findById(id);
+      if (!khuyenMaiFound) {
+        return res.status(404).json({
+          success: false,
+          message: "Khuyến mãi không tồn tại!",
+        });
+      }
+
       const khuyenMaiUpdated = await KhuyenMai.findByIdAndUpdate(id, data);
 
       if (!khuyenMaiUpdated) {
@@ -114,13 +131,13 @@ const khuyenMaiController = {
 
       if (type !== "orderDiscount" && listId.length > 0) {
         const productsPromotion = await Promise.all(
-          listId.map(async (idParam) => {
+          listId.map(async (paramId) => {
             try {
               const productPromotion =
                 type === "categoryDiscount"
                   ? await SanPham.updateMany(
                       {
-                        loaiSanPham: idParam,
+                        loaiSanPham: paramId,
                       },
                       {
                         $push: {
@@ -130,7 +147,7 @@ const khuyenMaiController = {
                     )
                   : await SanPham.findByIdAndUpdate(
                       {
-                        _id: idParam,
+                        _id: paramId,
                       },
                       {
                         $push: {

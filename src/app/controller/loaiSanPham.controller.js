@@ -35,6 +35,14 @@ const LoaiSanPhamController = {
       const loaiSanPhams = await LoaiSanPham.find({
         isDel: false,
       });
+
+      if (!loaiSanPhams) {
+        return res.status(404).json({
+          success: false,
+          message: "Danh sách loại sản phẩm trống!",
+        });
+      }
+
       return res.status(200).json({
         success: true,
         message: "Danh sách loại sản phẩm!",
