@@ -4,6 +4,14 @@ const TraController = {
   getTras: async (req, res) => {
     try {
       const trasFound = await Tra.find();
+
+      if (!trasFound) {
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy trà!",
+        });
+      }
+
       return res.status(200).json({
         success: true,
         message: "Danh sách trà!",

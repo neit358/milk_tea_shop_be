@@ -146,10 +146,6 @@ const hoaDonController = {
               $ne: new ObjectId(filter[0].$match?.["trangThai"]?.["$ne"]),
             },
           }
-        : filter[0].$match?.["trangThai"]
-        ? {
-            trangThai: new ObjectId(filter[0].$match?.["trangThai"]),
-          }
         : {};
 
       filter[0].$match = {

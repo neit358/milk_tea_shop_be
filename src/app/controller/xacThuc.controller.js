@@ -19,6 +19,13 @@ const XacThucController = {
       const user = { ...req.body, matKhau: hashPassword };
       const userCreated = await NguoiDung.create(user);
 
+      if (!userCreated) {
+        return res.status(404).json({
+          success: false,
+          message: "Tạo tài khoản không thành công!",
+        });
+      }
+
       const userResponse = omit(userCreated.toObject(), ["matKhau"]);
 
       return res.status(200).json({
@@ -60,7 +67,6 @@ const XacThucController = {
       }
 
       const userResponse = omit(nguoiDungFound.toObject(), ["matKhau"]);
-
       req.session.user = userResponse;
 
       res.status(200).json({
@@ -100,8 +106,8 @@ const XacThucController = {
   checkAuth: async (req, res, next) => {
     if (req.session.user) {
       const nguoiDungFound = await NguoiDung.findOne({
-        sdt: req.session.user.sdt,
-      });
+        _id: req.session.user._id,
+      }).populate("vaiTro");
 
       if (!nguoiDungFound) {
         req.session.destroy();
@@ -111,10 +117,13 @@ const XacThucController = {
         });
       }
 
+      const userResponse = omit(nguoiDungFound.toObject(), ["matKhau"]);
+      req.session.user = userResponse;
+
       return res.status(200).json({
         success: true,
         message: "Đã đăng nhập!",
-        result: req.session.user,
+        result: userResponse,
       });
     }
 

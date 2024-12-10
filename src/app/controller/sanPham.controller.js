@@ -74,9 +74,9 @@ const SanPhamController = {
       if (sortOrder === "date") {
         sort = { createdAt: -1 };
       } else if (sortOrder === "price") {
-        sort = { price: 1 };
+        sort = { gia: 1 };
       } else if (sortOrder === "price-desc") {
-        sort = { price: -1 };
+        sort = { gia: -1 };
       }
 
       const skip = (Number(page) - 1) * Number(limit);
@@ -105,6 +105,7 @@ const SanPhamController = {
             total,
             page: Number(page),
             limit: Number(limit),
+            itemCount: sanPhamsFound.length,
             totalPages:
               Math.ceil(total / Number(limit)) > 0
                 ? Math.ceil(total / Number(limit))

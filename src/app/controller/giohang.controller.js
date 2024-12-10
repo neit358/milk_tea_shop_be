@@ -5,13 +5,18 @@ const gioHangController = {
     try {
       const { id } = req.params;
       const gioHangFound = await GioHang.findOne({ nguoiDung: id })
-        .populate("items.sanPham")
+        .populate({
+          path: "items.sanPham",
+          populate: {
+            path: "khuyenMai",
+            model: "KhuyenMai",
+          },
+        })
         .populate("items.thongTinKichThuoc.kichThuoc")
         .populate("items.thongTinTopping.topping")
         .populate("items.ngot")
         .populate("items.da")
-        .populate("items.tra")
-        .populate("items.khuyenMai");
+        .populate("items.tra");
       if (!gioHangFound) {
         return res.status(200).json({
           success: false,

@@ -43,10 +43,6 @@ const gioHangSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Tra",
         },
-        khuyenMai: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "KhuyenMai",
-        },
       },
     ],
   },
